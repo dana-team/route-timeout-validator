@@ -91,7 +91,7 @@ spec:
           periodSeconds: 10
         env:
         - name: secondsTimeout
-          value: '600'
+          value: $(SECONDS_TIMEOUT)
         resources:
           limits:
             cpu: 500m

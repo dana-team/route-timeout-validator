@@ -140,3 +140,18 @@ replacements:
           delimiter: '.'
           index: 1
           create: true
+  - source:
+      kind: ConfigMap
+      name: example
+      fieldPath: data.secondsTimeout
+    targets:
+      - select:
+          kind: Deployment
+          name: controller-manager
+        fieldPaths:
+          - spec.template.spec.containers.[name=manager].env.[name=secondsTimeout].value
+
+configMapGenerator:
+  - name: example
+    literals:
+      - secondsTimeout=600

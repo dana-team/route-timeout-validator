@@ -18,24 +18,19 @@ package main
 
 import (
 	"crypto/tls"
-	"errors"
 	"flag"
-	"os"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-
-	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	// to ensure that exec-entrypoint and run can make use of them.
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
 	routewebhook "github.com/dana-team/route-timeout-validator/internal/webhook"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	"os"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -46,13 +41,6 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-	log := setupLog.WithValues("webhook", "Route Webhook")
-	if os.Getenv("secondsTimeout") == "" {
-		err := errors.New("environment variable is not set")
-		log.Error(err, "secondsTimeout is not set")
-		panic("secondsTimeout env variable is not set.")
-	}
-
 	//+kubebuilder:scaffold:scheme
 }
 
