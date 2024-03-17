@@ -19,12 +19,13 @@ package main
 import (
 	"crypto/tls"
 	"flag"
+	"os"
+
 	routewebhook "github.com/dana-team/route-timeout-validator/internal/webhook"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
-	"os"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
@@ -129,7 +130,10 @@ func main() {
 	setupLog.Info("setting up webhook server")
 	hookServer := mgr.GetWebhookServer()
 	decoder := admission.NewDecoder(scheme)
-	hookServer.Register("/validate-v1-route", &webhook.Admission{Handler: &routewebhook.RouteValidator{Decoder: decoder, Log: setupLog, Client: mgr.GetClient()}})
+	hookServer.Register("/validate-v1-route", &webhook.Admission{Handler: &routewebhook.RouteValidator{
+		Decoder: decoder,
+		Log:     setupLog,
+		Client:  mgr.GetClient()}})
 
 	setupLog.Info("starting manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {

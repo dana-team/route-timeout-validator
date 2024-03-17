@@ -3,17 +3,18 @@ package webhook
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"os"
+	"regexp"
+	"strconv"
+	"time"
+
 	"github.com/go-logr/logr"
 	routev1 "github.com/openshift/api/route/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"net/http"
-	"os"
-	"regexp"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	"strconv"
-	"time"
 )
 
 // +kubebuilder:rbac:groups="",resources=secrets;namespaces,verbs=get;list;watch
