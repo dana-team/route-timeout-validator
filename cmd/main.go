@@ -20,7 +20,7 @@ import (
 	"crypto/tls"
 	"flag"
 	"os"
-
+	routev1 "github.com/openshift/api/route/v1"
 	routewebhook "github.com/dana-team/route-timeout-validator/internal/webhook"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
