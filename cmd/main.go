@@ -42,6 +42,7 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
+	utilruntime.Must(routev1.Install(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
