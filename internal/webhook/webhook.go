@@ -21,7 +21,7 @@ import (
 // +kubebuilder:webhook:path=/validate-v1-route,mutating=false,failurePolicy=ignore,sideEffects=None,groups=route.openshift.io,resources=routes,verbs=create;update,versions=v1,name=routetimeout.dana.io,admissionReviewVersions=v1;v1beta1
 
 type RouteValidator struct {
-	Decoder *admission.Decoder
+	Decoder admission.Decoder
 	Log     logr.Logger
 	Client  client.Client
 }
