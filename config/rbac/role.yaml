@@ -8,8 +8,21 @@ rules:
   - ""
   resources:
   - namespaces
-  - secrets
   verbs:
+  - create
   - get
   - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
   - watch

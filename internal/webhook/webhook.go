@@ -17,7 +17,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// +kubebuilder:rbac:groups="",resources=secrets;namespaces,verbs=get;list;watch
+// +kubebuilder:rbac:groups="route.openshift.io",resources=routes,verbs=get;list;watch;create;update;patch
+// +kubebuilder:rbac:groups="",resources=namespaces,verbs=get;list;watch;create;update;patch
 // +kubebuilder:webhook:path=/validate-v1-route,mutating=false,failurePolicy=ignore,sideEffects=None,groups=route.openshift.io,resources=routes,verbs=create;update,versions=v1,name=routetimeout.dana.io,admissionReviewVersions=v1;v1beta1
 
 type RouteValidator struct {
