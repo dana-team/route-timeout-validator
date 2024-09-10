@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "route-timeout-validator.fullname" . }}-leader-election-rolebinding
+  labels:
+  {{- include "route-timeout-validator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "route-timeout-validator.fullname" . }}-leader-election-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "route-timeout-validator.fullname" . }}-controller-manager
+    namespace: {{ .Release.Namespace }}

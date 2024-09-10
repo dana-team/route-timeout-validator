@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ include "route-timeout-validator.fullname" . }}-validating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "route-timeout-validator.fullname" . }}-serving-cert
+  labels:
+  {{- include "route-timeout-validator.labels" . | nindent 4 }}
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: {{ include "route-timeout-validator.fullname" . }}-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /validate-v1-route
+  failurePolicy: Ignore
+  name: routetimeout.dana.io
+  rules:
+  - apiGroups:
+    - route.openshift.io
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - routes
+  sideEffects: None
