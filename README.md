@@ -28,6 +28,16 @@ This project implements a Kubernetes admission webhook that validates `Route` ob
 $ make deploy IMG=ghcr.io/dana-team/route-timeout-validator:<release>
 ```
 
+### Install with Helm
+
+Helm chart docs are available on `charts/route-timeout-validator` directory.
+
+Make sure `cert-manager` is [installed](https://cert-manager.io/docs/installation/helm/) as a prerequisite.
+
+```
+$ helm upgrade --install route-timeout-validator --namespace route-timeout-system --create-namespace oci://ghcr.io/dana-team/helm-charts/route-timeout-validator --version <release>
+```
+
 #### Build your own image
 
 ```bash
