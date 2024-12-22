@@ -169,10 +169,10 @@ HELM_DOCS ?= $(LOCALBIN)/helm-docs-$(HELM_DOCS_VERSION)
 HELM_URL ?= https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 
 ## Tool Versions
-KUSTOMIZE_VERSION ?= v5.3.0
-CONTROLLER_TOOLS_VERSION ?= v0.16.2
+KUSTOMIZE_VERSION ?= v5.5.0
+CONTROLLER_TOOLS_VERSION ?= v0.16.4
 ENVTEST_VERSION ?= latest
-GOLANGCI_LINT_VERSION ?= v1.60.3
+GOLANGCI_LINT_VERSION ?= v1.61.0
 HELM_DOCS_VERSION ?= v1.14.2
 
 .PHONY: kustomize
