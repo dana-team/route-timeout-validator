@@ -7,12 +7,13 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"time"
 
+	"github.com/dana-team/route-timeout-validator/internal/webhook/utils"
 	"github.com/go-logr/logr"
 	routev1 "github.com/openshift/api/route/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
@@ -58,13 +59,23 @@ func (r *RouteValidator) Handle(ctx context.Context, req admission.Request) admi
 	}
 
 	bypass := bypassExists(namespace)
-	return r.handle(timeout, bypass)
+	return r.handle(timeout, bypass, route.Spec.TLS)
 }
 
 // handle handles the timeout validation.
-func (r *RouteValidator) handle(timeout string, bypass bool) admission.Response {
+func (r *RouteValidator) handle(timeout string, bypass bool, tlsConfig *routev1.TLSConfig) admission.Response {
 	if !validateTimeoutString(timeout) {
 		return admission.Denied("The timeout annotation is invalid. Please use a valid format: <number><time unit> (e.g., '10s' for 10 seconds).")
+	}
+
+	if tlsConfig != nil {
+		message, err := r.ValidateTLS(tlsConfig)
+		if err != nil {
+			return admission.Errored(http.StatusInternalServerError, err)
+		}
+		if message != "" {
+			return admission.Denied(message)
+		}
 	}
 
 	maxTimeoutSeconds, err := r.getMaxTimeout()
@@ -72,7 +83,7 @@ func (r *RouteValidator) handle(timeout string, bypass bool) admission.Response 
 		return admission.Errored(http.StatusInternalServerError, err)
 	}
 
-	overMax, err := isTimeoutOverMax(timeout, maxTimeoutSeconds)
+	overMax, err := utils.IsTimeoutOverMax(timeout, maxTimeoutSeconds)
 	if err != nil {
 		return admission.Errored(http.StatusInternalServerError, err)
 	}
@@ -108,21 +119,6 @@ func validateTimeoutString(timeout string) bool {
 	return false
 }
 
-// isTimeoutOverMax checks if the given timeout duration is over the specified maximum duration.
-// It parses the timeout string into a time.Duration and compares it with the maximum duration in seconds.
-func isTimeoutOverMax(timeout string, maxTimeoutSeconds float64) (bool, error) {
-	duration, err := time.ParseDuration(timeout)
-	if err != nil {
-		return false, err
-	}
-
-	if duration.Seconds() > maxTimeoutSeconds {
-		return true, nil
-	}
-
-	return false, nil
-}
-
 // getMaxTimeout retrieves the maximum timeout value from the environment variable MaxTimeoutSeconds.
 // If the environment variable is not set, it falls back to a default value.
 func (r *RouteValidator) getMaxTimeout() (float64, error) {
@@ -136,4 +132,30 @@ func (r *RouteValidator) getMaxTimeout() (float64, error) {
 		return 0, err
 	}
 	return valueFloat, nil
+}
+
+func (r *RouteValidator) ValidateTLS(config *routev1.TLSConfig) (string, error) {
+	if config.Termination == routev1.TLSTerminationPassthrough {
+		return "", nil
+	}
+	if config.Certificate != "" {
+		valid, err := utils.ValidateCert(config.Certificate)
+		if err != nil {
+			return "", err
+		}
+		if !valid {
+			return "Invalid certificate", nil
+		}
+	}
+
+	if config.Key != "" {
+		valid, err := utils.ValidateKey(config.Key)
+		if err != nil {
+			return "", err
+		}
+		if !valid {
+			return "Invalid key", nil
+		}
+	}
+	return "", nil
 }
