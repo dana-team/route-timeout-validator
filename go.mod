@@ -1,6 +1,7 @@
 module github.com/dana-team/route-timeout-validator
 
 go 1.23.4
+
 toolchain go1.24.1
 
 require (
@@ -10,7 +11,7 @@ require (
 	k8s.io/api v0.32.3
 	k8s.io/apimachinery v0.32.3
 	k8s.io/client-go v0.32.3
-	sigs.k8s.io/controller-runtime v0.20.2
+	sigs.k8s.io/controller-runtime v0.20.4
 )
 
 require (
