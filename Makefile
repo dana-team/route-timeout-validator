@@ -172,7 +172,7 @@ HELM_URL ?= https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 KUSTOMIZE_VERSION ?= v5.5.0
 CONTROLLER_TOOLS_VERSION ?= v0.16.4
 ENVTEST_VERSION ?= latest
-GOLANGCI_LINT_VERSION ?= v1.61.0
+GOLANGCI_LINT_VERSION ?= v2.0.2
 HELM_DOCS_VERSION ?= v1.14.2
 
 .PHONY: kustomize
@@ -193,7 +193,7 @@ $(ENVTEST): $(LOCALBIN)
 .PHONY: golangci-lint
 golangci-lint: $(GOLANGCI_LINT) ## Download golangci-lint locally if necessary.
 $(GOLANGCI_LINT): $(LOCALBIN)
-	$(call go-install-tool,$(GOLANGCI_LINT),github.com/golangci/golangci-lint/cmd/golangci-lint,${GOLANGCI_LINT_VERSION})
+	$(call go-install-tool,$(GOLANGCI_LINT),github.com/golangci/golangci-lint/v2/cmd/golangci-lint,${GOLANGCI_LINT_VERSION})
 
 .PHONY: helm
 helm:
