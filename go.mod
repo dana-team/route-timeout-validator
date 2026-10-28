@@ -4,7 +4,7 @@ go 1.27.3
 
 require (
 	github.com/go-logr/logr v1.4.4
-	github.com/onsi/gomega v1.39.0
+	github.com/onsi/gomega v1.44.0
 	github.com/openshift/api v0.0.0-20261027123455-77c45d1bcab3
 	k8s.io/api v0.37.1
 	k8s.io/apimachinery v0.37.1
