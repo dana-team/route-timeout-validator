@@ -2,7 +2,7 @@
 # Image URL to use all building/pushing image targets
 IMG ?= controller:latest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
-ENVTEST_K8S_VERSION = 1.29.0
+ENVTEST_K8S_VERSION = 1.37.0
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -169,10 +169,10 @@ HELM_DOCS ?= $(LOCALBIN)/helm-docs-$(HELM_DOCS_VERSION)
 HELM_URL ?= https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 
 ## Tool Versions
-KUSTOMIZE_VERSION ?= v5.5.0
-CONTROLLER_TOOLS_VERSION ?= v0.16.4
+KUSTOMIZE_VERSION ?= v5.8.3
+CONTROLLER_TOOLS_VERSION ?= v0.23.0
 ENVTEST_VERSION ?= latest
-GOLANGCI_LINT_VERSION ?= v2.0.2
+GOLANGCI_LINT_VERSION ?= v2.15.0
 HELM_DOCS_VERSION ?= v1.14.2
 
 .PHONY: kustomize

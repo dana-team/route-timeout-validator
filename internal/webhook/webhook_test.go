@@ -30,6 +30,7 @@ const (
 	country                = "US"
 	locality               = "San Francisco"
 	privateKeyPlaceholder  = "RSA PRIVATE KEY"
+	validTimeout           = "50s"
 )
 
 // generateCertificate generates a self-signed certificate and returns its PEM-encoded certificate and private key.
@@ -90,11 +91,11 @@ func TestRouteWebhook(t *testing.T) {
 		{name: "badSyntaxTimeoutRoute", timeoutValue: "1s1s", allowed: false, bypass: false, tls: false, certificate: "", privateKey: ""},
 		{name: "badSyntaxTimeoutRoute", timeoutValue: "s", allowed: false, bypass: false, tls: false, certificate: "", privateKey: ""},
 		{name: "badRangeTimeoutRange", timeoutValue: "1000s", allowed: false, bypass: false, tls: false, certificate: "", privateKey: ""},
-		{name: "goodTimeoutRoute", timeoutValue: "50s", allowed: true, bypass: false, tls: false, certificate: "", privateKey: ""},
+		{name: "goodTimeoutRoute", timeoutValue: validTimeout, allowed: true, bypass: false, tls: false, certificate: "", privateKey: ""},
 		{name: "bypassTest", timeoutValue: "3000s", allowed: true, bypass: true, tls: false, certificate: "", privateKey: ""},
-		{name: "goodTLS", timeoutValue: "50s", allowed: true, bypass: false, tls: true, certificate: "", privateKey: ""},
-		{name: "badTLSCertificate", timeoutValue: "50s", allowed: false, bypass: false, tls: true, certificate: "BadCertificate", privateKey: ""},
-		{name: "badTLSPrivateKey", timeoutValue: "50s", allowed: false, bypass: false, tls: true, certificate: "", privateKey: "BadPrivateKey"},
+		{name: "goodTLS", timeoutValue: validTimeout, allowed: true, bypass: false, tls: true, certificate: "", privateKey: ""},
+		{name: "badTLSCertificate", timeoutValue: validTimeout, allowed: false, bypass: false, tls: true, certificate: "BadCertificate", privateKey: ""},
+		{name: "badTLSPrivateKey", timeoutValue: validTimeout, allowed: false, bypass: false, tls: true, certificate: "", privateKey: "BadPrivateKey"},
 	}
 
 	ns := corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "test1"}}
